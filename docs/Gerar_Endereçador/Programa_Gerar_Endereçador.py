@@ -6,14 +6,15 @@ import requests
 import os
 import webbrowser
 
-VERSAO_ATUAL = "v2.0"  # NÃO ESQUECERRRRRRRRRR: Atualiza isso sempre que gerar uma nova versão
-NOME_PROGRAMA = "Programa_Gerar_Endereçador"
+VERSAO_ATUAL = "v0.0"  # NÃO ESQUECERRRRRRRRRR: Atualiza isso sempre que gerar uma nova versão
+NOME_PROGRAMA = "Gerar_Endereçador"
 
-# o comando para crianção do executavel é: pyinstaller --onefile --noconsole --icon=postcard.ico Programa_Gerar_Endereçador.py
+# o comando para crianção do executavel é: pyinstaller --onefile --noconsole --icon=postcard.ico Gerar_Endereçador.py
 
 def verificar_versao(nome_programa, versao_atual):
     try:
-        url = f"https://fernandx7.github.io/Atualizador-Utilitarios/{nome_programa}/latest.txt"
+        url = f"https://fernando-dev.tech/Programas/{nome_programa}/versions/latest.txt"
+        # url = f"https://fernandx7.github.io/Atualizador-Utilitarios/{nome_programa}/latest.txt"
         resposta = requests.get(url, timeout=5)
         if resposta.status_code == 200:
             versao_disponivel = resposta.text.strip()
@@ -32,7 +33,7 @@ def notificar_usuario_e_atualizar(nome_programa, nova_versao):
         f"Uma nova versão ({nova_versao}) está disponível.\nDeseja baixar e instalar agora?"
     )
     if resposta:
-        url = "https://raw.githubusercontent.com/Fernandx7/Atualizador-Utilitarios/main/docs/Programa_Gerar_Endereçador/v2.0/setup/Setup_enderecador.exe"
+        url = "https://raw.githubusercontent.com/Fernandx7/Programas/main/docs/Gerar_Endereçador/versions/V1.0/Setup_enderecador.exe"
         arquivo_destino = "Setup_enderecador.exe"
 
         try:
