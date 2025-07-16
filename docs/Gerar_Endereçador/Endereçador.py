@@ -6,14 +6,15 @@ import requests
 import os
 import webbrowser
 
-VERSAO_ATUAL = "v1.0"  # NÃO ESQUECERRRRRRRRRR: Atualiza isso sempre que gerar uma nova versão
-NOME_PROGRAMA = "Programa_Gerar_Endereçador"
+VERSAO_ATUAL = "v0.0"  # NÃO ESQUECERRRRRRRRRR: Atualiza isso sempre que gerar uma nova versão
+NOME_PROGRAMA = "Gerar_Endereçador"
 
-# o comando para crianção do executavel é: pyinstaller --onefile --noconsole --icon=postcard.ico Programa_Gerar_Endereçador.py
+# o comando para crianção do executavel é: pyinstaller --onefile --noconsole --icon=postcard.ico Gerar_Endereçador.py
 
 def verificar_versao(nome_programa, versao_atual):
     try:
-        url = f"https://fernandx7.github.io/Atualizador-Utilitarios/{nome_programa}/latest.txt"
+        url = f"https://fernando-dev.tech/Programas/{nome_programa}/versions/latest.txt"
+        # url = f"https://fernandx7.github.io/Atualizador-Utilitarios/{nome_programa}/latest.txt"
         resposta = requests.get(url, timeout=5)
         if resposta.status_code == 200:
             versao_disponivel = resposta.text.strip()
@@ -32,7 +33,7 @@ def notificar_usuario_e_atualizar(nome_programa, nova_versao):
         f"Uma nova versão ({nova_versao}) está disponível.\nDeseja baixar e instalar agora?"
     )
     if resposta:
-        url = "https://raw.githubusercontent.com/Fernandx7/Atualizador-Utilitarios/main/docs/Programa_Gerar_Endereçador/v2.0/setup/Setup_enderecador.exe"
+        url = "https://raw.githubusercontent.com/Fernandx7/Programas/main/docs/Gerar_Endereçador/versions/V1.0/Setup_enderecador.exe"
         arquivo_destino = "Setup_enderecador.exe"
 
         try:
@@ -115,6 +116,7 @@ def coletar_dados(pessoa):
             "bairro": bairro_remetente_var.get(),
             "cidade": cidade_remetente_var.get(),
             "estado": estado_remetente_var.get(),
+            "cepremetente": cep_remetente_var.get()
         }
     else:
         return {
@@ -124,6 +126,7 @@ def coletar_dados(pessoa):
             "bairro": bairro_destinatario_var.get(),
             "cidade": cidade_destinatario_var.get(),
             "estado": estado_destinatario_var.get(),
+            "cepdestinatario": cep_destinatario_var.get()
         }
 
 # Função para gerar a etiqueta no formato PDF
@@ -144,14 +147,16 @@ def gerar_pdf(remetente, destinatario, caminho_arquivo):
     c.drawString(margem_x, margem_y - 60, f" {destinatario['endereco']}, {destinatario['numero']}")
     c.drawString(margem_x, margem_y - 80, f" {destinatario['bairro']}")
     c.drawString(margem_x, margem_y - 100, f"{destinatario['cidade']}/{destinatario['estado']}")
-    c.drawString(margem_x, margem_y - 120, "----------------------------------------------------------------")
+    c.drawString(margem_x, margem_y - 120, f"{destinatario ['cepdestinatario']}")
+    c.drawString(margem_x, margem_y - 140, "----------------------------------------------------------------")
 
-    c.drawString(margem_x, margem_y - 140, "                REMETENTE")
-    c.drawString(margem_x, margem_y - 160, f" {remetente['nome']}")
-    c.drawString(margem_x, margem_y - 180, f" {remetente['endereco']}, {remetente['numero']}")
-    c.drawString(margem_x, margem_y - 200, f" {remetente['bairro']}")
-    c.drawString(margem_x, margem_y - 220, f" {remetente['cidade']}/{remetente['estado']}")
-    c.drawString(margem_x, margem_y - 240, "========================================")
+    c.drawString(margem_x, margem_y - 160, "                REMETENTE")
+    c.drawString(margem_x, margem_y - 180, f" {remetente['nome']}")
+    c.drawString(margem_x, margem_y - 200, f" {remetente['endereco']}, {remetente['numero']}")
+    c.drawString(margem_x, margem_y - 220, f" {remetente['bairro']}")
+    c.drawString(margem_x, margem_y - 240, f" {remetente['cidade']}/{remetente['estado']}")
+    c.drawString(margem_x, margem_y - 260, f"{remetente ['cepremetente']}")
+    c.drawString(margem_x, margem_y - 280, "========================================")
 
     # Salva o arquivo PDF
     c.save()
